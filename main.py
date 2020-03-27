@@ -12,22 +12,13 @@ log = logging.getLogger(__name__)
 
 class Client:
     def __init__(self):
-        self.hostname = '<my server>'
-        self.context = ssl.create_default_context()
         self.methods = {
             "a": self.chat
         }
         self.curr_id = 0
-        pygame.init()
-        self.screen = pygame.display.set_mode( (500,1000) )
-        pygame.display.set_caption('Python numbers')
-        self.screen.fill((0, 0, 0))
-        self.font = pygame.font.Font(None, 17)
-
-        self.username = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        while len(self.username) < 20:
-            self.username = str(input("Enter the username you want to use! Length must be less than 20. "))
-        self.menu()
+        self.context = ssl.create_default_context()
+        self.hostname = '<my server>'
+        self.main()
     def menu(self):
         input_box = pygame.Rect(100, 400, 140, 32)
         choice = "something i dunno"
@@ -70,4 +61,33 @@ class Client:
         cached_message = ""
         while message != "q":
             print("ak")
+    
+    def main(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode( (1000,1000) )
+        self.clock = pygame.time.Clock()
+        pygame.display.set_caption('Random Chat')
+        favicon = pygame.image.load('resources/favicon.png')
+        pygame.display.set_icon(favicon)
+        self.font = pygame.font.Font('resources/Modenine-2OPd.ttf', 16)
+        self.screen.fill((0, 0, 0))
+
+        username = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        prompt = self.font.render('Enter the username you want to use! Length must be less than 20. ', False, (255, 255, 255))
+        input_box = pygame.Rect(100, 100, 140, 32)
+        while len(username) > 20:
+            self.clock.tick(60)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    quit()
+                elif event.type == pygame.KEYDOWN:
+                    self.screen.blit(favicon, (200,100))
+
+            self.screen.fill((0, 0, 0))
+            self.screen.blit(prompt, (0, 500))
+            pygame.display.update()  # Or pygame.display.flip()
+            
+            #username = str(input("Enter the username you want to use! Length must be less than 20. "))
+        #self.menu()
 Client()
