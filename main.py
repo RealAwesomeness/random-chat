@@ -3,14 +3,16 @@ import ssl
 import json
 import select
 import logging
-import pygame
-from pygame.locals import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+import sys
 
 logging.basicConfig(filename="log.txt", filemode='a', format="%(asctime)s %(levelname)s: %(message)s", level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 
-class Client:
+class Client():
     def __init__(self):
         self.methods = {
             "a": self.chat
@@ -20,7 +22,7 @@ class Client:
         self.hostname = '<my server>'
         self.main()
     def menu(self):
-        input_box = pygame.Rect(100, 400, 140, 32)
+        self.username = self.input_box.text()
         choice = "something i dunno"
         while choice.lower() != "q":
             choice = str(input('''Choose something to do!
@@ -61,33 +63,24 @@ class Client:
         cached_message = ""
         while message != "q":
             print("ak")
-    
+
     def main(self):
-        pygame.init()
-        self.screen = pygame.display.set_mode( (1000,1000) )
-        self.clock = pygame.time.Clock()
-        pygame.display.set_caption('Random Chat')
-        favicon = pygame.image.load('resources/favicon.png')
-        pygame.display.set_icon(favicon)
-        self.font = pygame.font.Font('resources/Modenine-2OPd.ttf', 16)
-        self.screen.fill((0, 0, 0))
+        self.app = QApplication(sys.argv)
+        self.window = QWidget()
+        self.window.setGeometry(20,20,500,800) # sets the windows x, y, width, height
+        self.window.setWindowTitle("Random Chat") # setting the window title
+        self.input_box = QLineEdit()
+        self.input_box.setMaxLength(20)
+        self.input_box.setAlignment(Qt.AlignRight)
+        self.input_box.setFont(QFont("resources/Modenine-2OPd.ttf",20))
+        self.input_box.editingFinished.connect(self.menu)
 
-        username = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        prompt = self.font.render('Enter the username you want to use! Length must be less than 20. ', False, (255, 255, 255))
-        input_box = pygame.Rect(100, 100, 140, 32)
-        while len(username) > 20:
-            self.clock.tick(60)
+        flo = QFormLayout()
+        flo.addRow("Enter your username", self.input_box)
+        self.window.setLayout(flo)
+        self.window.show()
+        #QLineEdit('Enter the username you want to use! Length must be less than 20. ')
+        sys.exit(self.app.exec_())
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    quit()
-                elif event.type == pygame.KEYDOWN:
-                    self.screen.blit(favicon, (200,100))
 
-            self.screen.fill((0, 0, 0))
-            self.screen.blit(prompt, (0, 500))
-            pygame.display.update()  # Or pygame.display.flip()
-            
-            #username = str(input("Enter the username you want to use! Length must be less than 20. "))
-        #self.menu()
 Client()
